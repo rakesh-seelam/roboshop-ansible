@@ -16,7 +16,7 @@
      image_id: "{{ ami_id }}"
      instance_type: t3.micro
      tags:
-      Project: "{{ roboshop }}"
+      Project: roboshop 
       Component: "{{ item }}"
       Environment: "{{ env }}"
       name: "{{ item }}-{{ env }}"
