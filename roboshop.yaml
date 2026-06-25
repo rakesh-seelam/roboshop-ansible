@@ -19,7 +19,7 @@
       Project: roboshop 
       Component: "{{ item }}"
       Environment: "{{ env }}"
-      name: "{{ item }}-{{ env }}"
+      Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
 
@@ -27,6 +27,5 @@
     ansible.builtin.debug:
      msg: "{{ ec2-output }}"
     
-     
 
     
