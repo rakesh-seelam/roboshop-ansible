@@ -35,7 +35,7 @@
       record: "{{ item.item }}-{{ env }}.{{ domain_name }}"
       type: A
       ttl: 1
-      value: "{{item.instances[0].private_ip_address}}"
+      value: "{{ item.instances[0].private_ip_address }}"
       wait: false
       loop: "{{ec2_output.results}}"
     
