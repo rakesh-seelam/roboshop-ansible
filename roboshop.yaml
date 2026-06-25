@@ -4,6 +4,7 @@
   vars:
    sg_id: sg-0978bd3e9e6d67ee8
    ami_id: ami-0220d79f3f480ecf5
+   domain_name: rakesh.bond
    env: dev
    instances:
     - mongodb
@@ -26,6 +27,16 @@
   - name: print output
     ansible.builtin.debug:
      msg: "{{ ec2_output }}"
+
+  - name: create route 53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{item.item}}-{{ env }}.{{ domain_name }}"
+      type: A
+      ttl: 1
+      value: "{{item.instances[0].private_ip_address}}"
+      loop: "{{ec2_output.results}}"
     
 
     
