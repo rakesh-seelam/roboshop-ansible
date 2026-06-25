@@ -32,12 +32,24 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "{{ item.item }}-{{ env }}.{{ domain_name }}"
+      record: "{{ item.item }}-{{ env }}.{{ domain_name }}" #mogodb-dev.rakesh.bondS
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
       wait: false
     loop: "{{ec2_output.results}}"
+
+  - name: create route 53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "roboshp-{{ env }}.{{ domain_name }}" #roboshop-dev.rakesh.bond
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}"
+      wait: false
+    loop: "{{ec2_output.results}}"
+    when: item.item == frontend
     
 
     
