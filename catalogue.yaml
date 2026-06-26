@@ -2,7 +2,7 @@
   hosts: catalogue
   become: yes
   tasks: 
-  - name: Enable NodeJS 20
+  - name: enable nodejs 20
     ansible.builtin.comand: dnf module enable nodejs:20 -y
   
   - name: Install NodeJS
