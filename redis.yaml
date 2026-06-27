@@ -7,7 +7,7 @@
   
   - name: Install Redis
     anisble.builtin.dnf:
-      package: redis
+      name: redis
       state: present
   
   - name: Allowing remote connections
