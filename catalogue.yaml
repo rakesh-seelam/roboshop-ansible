@@ -18,10 +18,20 @@
         home: /app
         comment: "Roboshop system user"
   
+  - name: Delete app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
+  
   - name: Create the app directory
     ansible.builtin.file:
       path: /app
       state: directory
+  
+  - name: Delete application code
+    ansible.builtin.file:
+      path: /tmp/catalogue.zip
+      state: absent
   
   - name: Download catalogue code
     ansible.builtin.get_url:
@@ -62,7 +72,7 @@
      msg: "{{ catalogue_output }}"
 
   - name: Loading data to Mongodd
-    ansible.builtin.shell: mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js
+    ansible.builtin.shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
     when: catalogue_output.stdout | int < 0 
   
   - name: start catalogue
