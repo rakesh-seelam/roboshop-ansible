@@ -1,0 +1,92 @@
+- name: Configuring shipping
+  hosts: shipping
+  become: yes
+  tasks:  
+  - name: Install Maven
+    ansible.builtin.dnf:
+     name: "{{ item }}"
+     state: present
+    loop:
+     - mysql
+     - maven
+
+  - name: Create System User
+    ansible.builtin.user:
+        name: roboshop
+        system: true
+        shell: /sbin/nologin
+        home: /app
+        comment: "Roboshop system user"
+  
+  - name: Delete app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
+  
+  - name: Create the app directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+  
+  - name: Delete application code
+    ansible.builtin.file:
+      path: /tmp/shipping.zip
+      state: absent
+  
+  - name: Download shipping code
+    ansible.builtin.get_url:
+      url: "https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip"
+      dest: "/tmp/shipping.zip"
+
+  - name: Extracting shipping code
+    ansible.builtin.unarchive:
+      src: /tmp/shipping.zip
+      dest: /app
+      remote_src: yes
+
+  - name: download dependencies
+    ansible.builtin.command: mvn clean package
+    args:
+     chdir: /app
+  
+  - name: download dependencies
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar 
+    args: 
+     chdir: /app
+
+  - name: Copy service file
+    ansible.builtin.template:
+      src: shipping.service
+      dest: /etc/systemd/system/shipping.service
+  
+  - name: Reloding Daemon
+    ansible.builtin.systemd_service:
+     daemon_reload: true
+  
+  - name: download dependencies
+    ansible.builtin.pip:
+      name: "{{ item }}"
+      executable: pip3.9
+    loop:
+    - cryptography
+    - PyMySQL
+  
+  - name: import shipping data
+    community.mysql.mysql_db:
+      state: import
+      name: all
+      login_host: "{{ MYSQL_HOST }}"
+      login_user: root
+      login_password: RoboShop@1
+      target: "{{ item }}"
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql 
+    - /app/db/master-data.sql
+  
+  - name: start shipping
+    ansible.builtin.service:
+      name: shipping
+      state: restarted
+      enabled: yes
+  
