@@ -52,5 +52,18 @@
     args:
      chdir: /app
   
+  - name: Copy service file
+    ansible.builtin.template:
+      src: payment.service
+      dest: /etc/systemd/system/payment.service
   
+  - name: Reloding Daemon
+    ansible.builtin.systemd_service:
+     daemon_reload: true
+  
+  - name: Restart payment
+    ansible.builtin.service:
+      name: payment
+      state: restarted
+      enabled: yes
  
