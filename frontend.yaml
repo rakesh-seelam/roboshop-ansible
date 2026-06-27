@@ -52,9 +52,9 @@
       path: /etc/nginx/nginx.conf
 
   - name: Copy default nginx
-    ansible.builtin.file:
-      state: present
-      path: /etc/nginx/nginx.conf
+    ansible.builtin.template:
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
   
   - name: resatrt nginx
     ansible.builtin.service:
