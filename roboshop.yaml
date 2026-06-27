@@ -8,8 +8,16 @@
    env: dev
    action: create
    instances:
-    - mongodb
-    - catalogue
+    # - mongodb
+    # - catalogue
+    - redis
+    - user
+    - cart
+    - mysql
+    - shipping
+    - payment
+    - rabbitmq
+    - frontend
   tasks:
   - name: Create ec2 instance
     amazon.aws.ec2_instance:
