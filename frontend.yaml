@@ -14,26 +14,16 @@
     ansible.builtin.file:
       path: /usr/share/nginx/html/
       state: absent
+
+  - name: Delete app app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
   
   - name: Create HTML directory
     ansible.builtin.file:
       path: /usr/share/nginx/html/
       state: directory
-  
-  - name: Delete app directory
-    ansible.builtin.file:
-      path: /app
-      state: absent
-  
-  - name: Create the app directory
-    ansible.builtin.file:
-      path: /app
-      state: directory
-  
-  - name: Delete application code
-    ansible.builtin.file:
-      path: /tmp/frontend.zip 
-      state: absent
   
   - name: Download frontend code
     ansible.builtin.get_url:
@@ -43,7 +33,7 @@
   - name: Extracting frontend code
     ansible.builtin.unarchive:
       src: /tmp/frontend.zip
-      dest: /app
+      dest: /usr/share/nginx/html/
       remote_src: yes
   
   - name: remove default nginx
