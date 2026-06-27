@@ -34,14 +34,14 @@
       path: /tmp/shipping.zip
       state: absent
   
-  - name: Download shipping code
+  - name: Download payment code
     ansible.builtin.get_url:
-      url: "https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip"
-      dest: "/tmp/shipping.zip"
+      url: "https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip"
+      dest: "/tmp/payment.zip"
 
-  - name: Extracting shipping code
+  - name: Extracting payment code
     ansible.builtin.unarchive:
-      src: /tmp/shipping.zip
+      src: /tmp/payment.zip
       dest: /app
       remote_src: yes
   
@@ -51,6 +51,13 @@
      executable: pip3.9
     args:
      chdir: /app
+  
+  - name: install dependencie
+    ansible.builtin.pip:
+      requirements: requirements.txt
+      executable: pip3.9
+    args:
+      chdir: /app
   
   - name: Copy service file
     ansible.builtin.template:
