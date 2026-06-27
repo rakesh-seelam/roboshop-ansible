@@ -18,7 +18,7 @@
   - name: Create HTML directory
     ansible.builtin.file:
       path: /usr/share/nginx/html/
-      state: present
+      state: directory
   
   - name: Delete app directory
     ansible.builtin.file:
