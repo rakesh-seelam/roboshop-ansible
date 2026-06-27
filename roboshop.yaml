@@ -55,7 +55,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "roboshp-{{ env }}.{{ domain_name }}" #roboshop-dev.rakesh.bond
+      record: "roboshop-{{ env }}.{{ domain_name }}" #roboshop-dev.rakesh.bond
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
